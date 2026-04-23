@@ -37,7 +37,9 @@
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
-  document.getElementById('roomTitle').innerText = `💻 ${room} 현황판`;
+  const myName = urlParams.get('name'); // 내 이름 파라미터 추가
+  // 제목에 내 이름 표시 (선택 사항)
+  document.getElementById('roomTitle').innerText = `💻 ${room} 현황판 ${myName ? `(${myName}님)` : ''}`;
 
   /** [중요] Firebase 및 GAS 설정 (doorbell.html과 동일하게 설정하세요) **/
   const firebaseConfig = { apiKey: "AIzaSyD4olsHTZr_aMfm6364iIO0ZTN69oFeHl4",
