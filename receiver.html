@@ -94,7 +94,7 @@ database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
 
   // 조건 추가: 호출 데이터가 있고, 내 이름이 설정되어 있으며, 이름이 일치할 때만 알림
   if (data && data.timestamp > pageLoadTime) {
-    if (data.name === myName) {
+    if (myName && data.name === myName) {
     document.getElementById('callerName').innerText = `🚨 ${data.name}`;
     document.getElementById('callModal').style.display = 'flex';
     if (isAudioUnlocked) {
@@ -103,8 +103,9 @@ database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
       window.speechSynthesis.speak(msg);
     }
   } else {
-      console.log(`${data.name} 선생님 호출됨 (나 아님)`);  
+      console.log(`${data.name} 선생님 호출됨 (필터링됨)`);  
   }
+ }   
 });
 
 function closePopup() {
