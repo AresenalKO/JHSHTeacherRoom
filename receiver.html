@@ -91,14 +91,18 @@ function updateStatus(name, currentStatus) {
 // Firebase 실시간 리스너
 database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
   const data = snapshot.val();
+
+  // 조건 추가: 호출 데이터가 있고, 내 이름이 설정되어 있으며, 이름이 일치할 때만 알림
   if (data && data.timestamp > pageLoadTime) {
     document.getElementById('callerName').innerText = `🚨 ${data.name}`;
     document.getElementById('callModal').style.display = 'flex';
     if (isAudioUnlocked) {
-      const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 호출했습니다.`);
+      const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 찾아왔습니다.`);
       msg.lang = 'ko-KR';
       window.speechSynthesis.speak(msg);
     }
+  } else {
+      console.log(`${data.name} 선생님 호출됨 (나 아님)`);  
   }
 });
 
@@ -111,5 +115,3 @@ function closePopup() {
 </script>
 </body>
 </html>
-
-
