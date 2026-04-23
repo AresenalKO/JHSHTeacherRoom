@@ -20,7 +20,7 @@
 </head>
 <body>
 
-  <h1 id="roomTitle">🔔 교무센터 초인종</h1>
+  <h1 id="roomTitle">🔔 교무실 초인종</h1>
   <div class="grid-container" id="buttonGrid"></div>
   <div id="notification"></div>
 
@@ -28,7 +28,7 @@
   /** [중요] 1. URL 파라미터 설정 (예: ?room=교무실) **/
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
-  document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종`;
+  document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종(20초 대기 후 응답 없으면 노크)`;
 
   /** [중요] 2. Firebase 설정 (본인의 Firebase 프로젝트 정보를 입력하세요) **/
   const firebaseConfig = {
