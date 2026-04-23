@@ -25,9 +25,9 @@
   <div id="notification"></div>
 
 <script>
-  /** [중요] 1. URL 파라미터 설정 (예: ?room=3학년) **/
+  /** [중요] 1. URL 파라미터 설정 (예: ?room=교무실) **/
   const urlParams = new URLSearchParams(window.location.search);
-  const room = urlParams.get('room') || '3학년';
+  const room = urlParams.get('room') || '교무실';
   document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종`;
 
   /** [중요] 2. Firebase 설정 (본인의 Firebase 프로젝트 정보를 입력하세요) **/
