@@ -28,7 +28,7 @@
   /** [중요] 1. URL 파라미터 설정 (예: ?room=교무실) **/
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
-  document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종(20초 대기 후 응답 없으면 노크)`;
+  document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종(30초 대기 후 응답 없으면 노크)`;
 
   /** [중요] 2. Firebase 설정 (본인의 Firebase 프로젝트 정보를 입력하세요) **/
   const firebaseConfig = {
@@ -85,7 +85,7 @@ let countdownInterval; // 타이머 변수
     noti.style.display = 'block';
     noti.style.backgroundColor = '#2ecc71'; // 호출 성공 시 초록색
     
-    let timeLeft = 20; // 20초 설정
+    let timeLeft = 30; // 20초 설정
     
     // 알림창 내용 구성
     noti.innerHTML = `
