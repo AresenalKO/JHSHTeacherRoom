@@ -40,7 +40,11 @@
     <button onclick="closePopup()" style="padding: 15px 40px; font-size: 1.2em; cursor: pointer; background: #34495e; color: white; border: none; border-radius: 10px;">확인 완료</button>
   </div>
 </div>
-
+  
+<div id="loadingToast" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 15px 25px; border-radius: 30px; z-index: 10001; font-weight: bold;">
+  처리 중입니다...
+</div>
+  
 <script>
   /** 1. 기본 설정 및 파라미터 처리 **/
   const urlParams = new URLSearchParams(window.location.search);
@@ -98,13 +102,31 @@
   }
 
   function updateStatus(name, currentStatus) {
-    const newStatus = currentStatus === 'present' ? '부재중' : '재실';
-    const url = `${GAS_BASE_URL}?action=update&room=${encodeURIComponent(room)}&name=${encodeURIComponent(name)}&status=${encodeURIComponent(newStatus)}`;
-    fetch(url).then(() => {
+  const newStatus = currentStatus === 'present' ? '부재중' : '재실';
+  const toast = document.getElementById('loadingToast');
+  
+  // 1. 메시지 표시 (현재 어떤 상태로 바꾸는지 보여줌)
+  toast.innerText = `${newStatus} 처리 중입니다...`;
+  toast.style.display = 'block';
+
+  const url = `${GAS_BASE_URL}?action=update&room=${encodeURIComponent(room)}&name=${encodeURIComponent(name)}&status=${encodeURIComponent(newStatus)}`;
+  
+  fetch(url)
+    .then(() => {
       database.ref(`doorbell/${room}/syncTrigger`).set(Date.now());
-      loadTeachers();
+      loadTeachers(); // 목록 새로고침
+    })
+    .catch(err => {
+      console.error("업데이트 실패:", err);
+      alert("처리에 실패했습니다. 다시 시도해 주세요.");
+    })
+    .finally(() => {
+      // 2. 처리가 끝나면(성공하든 실패하든) 1초 후에 메시지 숨기기
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 1000); 
     });
-  }
+}
 
   /** 4. 실시간 리스너 (알림 및 동기화) **/
   database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
