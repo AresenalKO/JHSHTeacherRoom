@@ -126,10 +126,11 @@ database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
     }
 });
   
-database.ref(`doorbell/${room}/syncTrigger`).on('value', () => {
-      console.log("데이터 변경 감지: 목록을 새로고침합니다.");
-      //loadTeachers(); 
-  });
+// Firebase에서 syncTrigger 값이 바뀌면 (누군가 버튼을 누르면) 실행됨
+database.ref(`doorbell/${room}/syncTrigger`).on('value', (snapshot) => {
+    console.log("동기화 신호 수신 - 목록 갱신 시작");
+    loadTeachers(); // 이 함수가 실행되면서 화면의 버튼들이 새로 그려집니다.
+});
   
 function closePopup() {
     document.getElementById('callModal').style.display = 'none';
