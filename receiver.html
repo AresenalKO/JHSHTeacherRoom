@@ -36,7 +36,7 @@
 <div id="callModal">
   <div class="modal-content">
     <h2 id="callerName" style="color: #e74c3c; font-size: 2.5em; margin-top: 0;"></h2>
-    <p style="font-size: 1.5em; margin-bottom: 30px;">선생님! 학생이 밖에서 찾고 있습니다.</p>
+    <p style="font-size: 1.5em; margin-bottom: 30px;">선생님! 학생이 찾습니다.</p>
     <button onclick="closePopup()" style="padding: 15px 40px; font-size: 1.2em; cursor: pointer; background: #34495e; color: white; border: none; border-radius: 10px;">확인 완료</button>
   </div>
 </div>
@@ -120,7 +120,7 @@
         document.getElementById('callModal').style.display = 'flex';
         
         if (isAudioUnlocked) {
-          const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 호출했습니다.`);
+          const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 찾아 왔습니다.`);
           msg.lang = 'ko-KR';
           window.speechSynthesis.speak(msg);
         }
