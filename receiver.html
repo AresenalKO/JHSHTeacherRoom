@@ -40,10 +40,13 @@
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
   const myName = urlParams.get('name'); // 내 이름 파라미터 추가
+  let isAudioUnlocked = false;
+  let isFirstLoad = true; // 첫 로드 시 과거 알림 방지
+  
   // 제목에 내 이름 표시 (선택 사항)
-  document.getElementById('roomTitle').innerText = `💻 ${room} 현황판 ${myName ? `(${myName}님)` : ''}`;
-
-  /** [중요] Firebase 및 GAS 설정 (doorbell.html과 동일하게 설정하세요) **/
+  document.getElementById('roomTitle').innerText = myName ? `🔔 ${myName} 선생님 알림판` : `💻 ${room} 전체 현황판`;
+  
+  /** [중요] Firebase 및 GAS 설정 (doorbell.html과 동일하게 설정하세요) **/
   const firebaseConfig = { apiKey: "AIzaSyD4olsHTZr_aMfm6364iIO0ZTN69oFeHl4",
     authDomain: "jinhaesinhangteacher-sroom.firebaseapp.com",
     databaseURL: "https://jinhaesinhangteacher-sroom-default-rtdb.firebaseio.com",
@@ -92,17 +95,28 @@ function updateStatus(name, currentStatus) {
 
 // Firebase 실시간 리스너
 database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
-  const data = snapshot.val();
-  if (data && data.timestamp > pageLoadTime) {
-    document.getElementById('callerName').innerText = `🚨 ${data.name}`;
-    document.getElementById('callModal').style.display = 'flex';
-    if (isAudioUnlocked) {
-      const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 호출했습니다.`);
-      msg.lang = 'ko-KR';
-      window.speechSynthesis.speak(msg);
+    if (isFirstLoad) {
+      isFirstLoad = false;
+      return;
     }
-  }
-});
+
+    const data = snapshot.val();
+    if (data && data.name) {
+      // 필터링 로직: 이름이 지정되지 않았거나(전체모드), 지정된 이름과 호출된 이름이 같을 때만 실행
+      const isTarget = !myName || myName.trim() === data.name.trim();
+
+      if (isTarget) {
+        document.getElementById('callerName').innerText = `🚨 ${data.name} 선생님`;
+        document.getElementById('callModal').style.display = 'flex';
+        
+        if (isAudioUnlocked) {
+          const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 호출했습니다.`);
+          msg.lang = 'ko-KR';
+          window.speechSynthesis.speak(msg);
+        }
+      }
+    }
+  });
 
 database.ref(`doorbell/${room}/syncTrigger`).on('value', (snapshot) => {
   if (snapshot.exists()) {
