@@ -85,11 +85,13 @@ async function loadTeachers() {
 
 function updateStatus(name, currentStatus) {
   const newStatus = currentStatus === 'present' ? '부재중' : '재실';
+  // GAS에 먼저 업데이트 요청
   const url = `${GAS_BASE_URL}?action=update&room=${encodeURIComponent(room)}&name=${encodeURIComponent(name)}&status=${encodeURIComponent(newStatus)}`;
+  
   fetch(url).then(() => {
+    // [중요] 성공적으로 업데이트되면 Firebase의 syncTrigger 값을 강제로 변경하여 모든 화면에 신호를 보냄
     database.ref(`doorbell/${room}/syncTrigger`).set(Date.now());
-    loadTeachers();
-  });
+  }).catch(err => console.error("업데이트 실패:", err));
 }
 
 // Firebase 실시간 리스너
