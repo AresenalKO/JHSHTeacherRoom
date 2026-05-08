@@ -40,8 +40,6 @@
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
   const myName = urlParams.get('name'); // 내 이름 파라미터 추가
-  let isAudioUnlocked = false;
-  let isFirstLoad = true; // 첫 로드 시 과거 알림 방지
   
   // 제목에 내 이름 표시 (선택 사항)
   document.getElementById('roomTitle').innerText = myName ? `🔔 ${myName} 선생님 알림판` : `💻 ${room} 전체 현황판`;
