@@ -91,7 +91,7 @@ function updateStatus(name, currentStatus) {
 // Firebase 실시간 리스너
 database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
     const data = snapshot.val();
-    
+
     // 1. 데이터가 있고, 페이지 로드 이후의 호출인지 확인
     if (data && data.timestamp > pageLoadTime) {
       
@@ -121,7 +121,12 @@ database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
       }
     }
 });
-
+  
+database.ref(`doorbell/${room}/syncTrigger`).on('value', () => {
+      console.log("데이터 변경 감지: 목록을 새로고침합니다.");
+      //loadTeachers(); 
+  });
+  
 function closePopup() {
     document.getElementById('callModal').style.display = 'none';
     window.speechSynthesis.cancel(); 
