@@ -102,6 +102,12 @@ database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
   }
 });
 
+database.ref(`doorbell/${room}/syncTrigger`).on('value', (snapshot) => {
+  if (snapshot.exists()) {
+    loadTeachers(); // 누군가 상태를 바꾸면 내 화면도 자동 갱신
+  }
+});
+  
 function closePopup() {
     document.getElementById('callModal').style.display = 'none';
     window.speechSynthesis.cancel(); 
