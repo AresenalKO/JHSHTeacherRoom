@@ -46,9 +46,13 @@
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
   const myName = urlParams.get('name'); 
-  
-  document.getElementById('roomTitle').innerText = myName ? `🔔 $진해신항중 {room} 현황판({myName} 선생님)` : `💻 $진해신항중 {room} 현황판`;
 
+  if (myName) {
+    document.getElementById('roomTitle').innerText = `진해신항중 ${room} 현황판 (${myName} 선생님)`;
+  } else {
+    document.getElementById('roomTitle').innerText = `진해신항중 ${room} 현황판`;
+  }
+  
   const firebaseConfig = { 
     apiKey: "AIzaSyD4olsHTZr_aMfm6364iIO0ZTN69oFeHl4",
     authDomain: "jinhaesinhangteacher-sroom.firebaseapp.com",
