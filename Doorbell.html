@@ -54,7 +54,7 @@
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const room = urlParams.get('room') || '교무실';
-  document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종\n(30초 대기 후 응답 없으면 노크)`;
+  document.getElementById('roomTitle').innerText = `🔔 ${room} 초인종\n(20초 대기 후 응답 없으면 노크)`;
 
   const firebaseConfig = {
     apiKey: "AIzaSyD4olsHTZr_aMfm6364iIO0ZTN69oFeHl4",
@@ -115,7 +115,7 @@
     notiContent.innerText = `${name} 선생님을 호출했습니다.`;
     notiFooter.innerText = "잠시만 서서 기다려 주세요!";
     
-    let timeLeft = 30;
+    let timeLeft = 20;
     timerDisplay.innerText = `${timeLeft}초`;
 
     countdownInterval = setInterval(() => {
