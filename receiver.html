@@ -66,6 +66,10 @@
 
 async function loadTeachers() {
   const listDiv = document.getElementById('teacherList');
+  // 주소 뒤에 캐시 방지용 시간값을 붙입니다.
+  const response = await fetch(`${GAS_BASE_URL}?room=${encodeURIComponent(room)}&t=${Date.now()}`);
+  const teachers = await response.json();
+  const listDiv = document.getElementById('teacherList');
   const response = await fetch(`${GAS_BASE_URL}?room=${encodeURIComponent(room)}`);
   const teachers = await response.json();
   listDiv.innerHTML = "";
