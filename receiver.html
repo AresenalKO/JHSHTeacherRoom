@@ -90,50 +90,23 @@ function updateStatus(name, currentStatus) {
 
 // Firebase 실시간 리스너
 database.ref(`doorbell/${room}/lastCall`).on('value', (snapshot) => {
-    const data = snapshot.val();
-
-    // 시간 조건 확인
-    // 1. 데이터가 있고, 페이지 로드 이후의 호출인지 확인
-    if (data && data.timestamp > pageLoadTime) {
-
-      // 이름 필터링 조건
-      if (myName && data.name === myName) {
-      // 2. 알람 실행 여부 결정 로직
-      // (myName이 없으면 '전체 수신 모드', myName이 있으면 '개별 수신 모드')
-      const isMyCall = !myName || data.name === myName;
-
-      if (isMyCall) {
-        // 팝업 표시
-        document.getElementById('callerName').innerText = `🚨 ${data.name}`;
-        document.getElementById('callModal').style.display = 'flex';
-
-        // 음성 안내
-        if (isAudioUnlocked) {
-          const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 찾아왔습니다.`);
-          // 전체 모드일 때는 누구를 찾는지 명확히 알림
-          const speechMsg = myName 
-            ? `${data.name} 선생님, 학생이 찾아왔습니다.` 
-            : `${data.name} 선생님을 찾는 학생이 있습니다.`;
-            
-          const msg = new SpeechSynthesisUtterance(speechMsg);
-          msg.lang = 'ko-KR';
-          window.speechSynthesis.speak(msg);
-        }
-      } else {
-        // 내 이름이 아닐 경우 콘솔에만 기록
-        console.log(`${data.name} 선생님 호출됨 (나 아님)`);
-        // 내 이름이 지정되어 있는데 다른 사람이 호출된 경우
-        console.log(`${data.name} 선생님 호출됨 (필터링 중)`);
-      }
+  const data = snapshot.val();
+  if (data && data.timestamp > pageLoadTime) {
+    document.getElementById('callerName').innerText = `🚨 ${data.name}`;
+    document.getElementById('callModal').style.display = 'flex';
+    if (isAudioUnlocked) {
+      const msg = new SpeechSynthesisUtterance(`${data.name} 선생님, 학생이 호출했습니다.`);
+      msg.lang = 'ko-KR';
+      window.speechSynthesis.speak(msg);
     }
-  });
+  }
 });
 
 function closePopup() {
     document.getElementById('callModal').style.display = 'none';
     window.speechSynthesis.cancel(); 
   }
-
+  
   loadTeachers();
 </script>
 </body>
